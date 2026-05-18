@@ -9,7 +9,7 @@
     "dev": "tsx watch src/server.ts",
     "build": "tsc -p tsconfig.json",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
+     "test": "jest --reporters=default --reporters=jest-junit",
     "test:watch": "vitest",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
@@ -24,6 +24,7 @@
     "@typescript-eslint/eslint-plugin": "^8.59.1",
     "@typescript-eslint/parser": "^8.59.1",
     "eslint": "^8.57.1",
+    "jest-junit": "^17.0.0",
     "prettier": "^3.8.3",
     "tsx": "^4.21.0",
     "typescript": "^5.9.3",
@@ -31,5 +32,9 @@
   },
   "dependencies": {
     "fastify": "^5.8.5"
-  }
+  },
+  "jest-junit": {
+  "outputDirectory": "reports",
+  "outputName": "junit.xml"
+}
 }

@@ -1,0 +1,51 @@
+name: CI Pipeline
+
+# 觸發條件：當有人 push 到任何分支時自動執行
+on:
+  push:
+    branches:
+      - '**'
+
+jobs:
+  build-and-test:
+    name: Build and Test
+    runs-on: ubuntu-latest  # 在 GitHub 提供的 Ubuntu 機器上執行
+
+    steps:
+      # Step 1: 把你的程式碼下載到那台機器
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: 安裝 Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      # Step 3: 安裝專案套件
+      - name: Install dependencies
+        run: npm ci
+
+      # Step 4: TypeScript 型別檢查
+      - name: TypeScript Typecheck
+        run: npm run typecheck
+
+      # Step 5: Prettier 格式檢查
+      - name: Prettier Check
+        run: npm run format:check
+
+      # Step 6: 跑測試，並產生 JUnit 格式的結果報告
+      - name: Run Tests
+        run: npm test
+        # 即使測試失敗也要繼續，這樣才能上傳測試報告
+        continue-on-error: false
+
+      # Step 7: 把測試結果秀在 GitHub Actions 頁面上
+      - name: Publish Test Report
+        uses: dorny/test-reporter@v1
+        if: always()  # 不論測試成功失敗都要執行
+        with:
+          name: Test Results
+          path: 'reports/junit.xml'  # 測試報告的路徑（下面會設定）
+          reporter: jest-junit
