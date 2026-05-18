@@ -9,7 +9,7 @@ on:
 jobs:
   build-and-test:
     name: Build and Test
-    runs-on: ubuntu-latest  # 在 GitHub 提供的 Ubuntu 機器上執行
+    runs-on: ubuntu-latest # 在 GitHub 提供的 Ubuntu 機器上執行
 
     steps:
       # Step 1: 把你的程式碼下載到那台機器
@@ -41,11 +41,11 @@ jobs:
         # 即使測試失敗也要繼續，這樣才能上傳測試報告
         continue-on-error: false
 
-      # Step 7: 把測試結果秀在 GitHub Actions 頁面上
+      #  Publish 測試報告到 GitHub Actions 頁面
       - name: Publish Test Report
-        uses: dorny/test-reporter@v1
-        if: always()  # 不論測試成功失敗都要執行
+        uses: dorny/test-reporter@v2
+        if: always()
         with:
           name: Test Results
-          path: 'reports/junit.xml'  # 測試報告的路徑（下面會設定）
-          reporter: jest-junit
+          path: 'reports/junit.xml'
+          reporter: java-junit # ← Vitest 用 java-junit 解析
